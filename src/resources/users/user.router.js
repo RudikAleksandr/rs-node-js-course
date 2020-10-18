@@ -9,11 +9,11 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const user = await usersService.get(req.params.id);
-  if (user) {
-    res.json(User.toResponse(user));
+  if (!user) {
+    return res.status(404).send();
   }
 
-  res.status(404).send();
+  res.json(User.toResponse(user));
 });
 
 router.post('/', async (req, res) => {
