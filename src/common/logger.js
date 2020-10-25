@@ -1,4 +1,4 @@
-const { createLogger, transports } = require('winston');
+const { createLogger, transports, format } = require('winston');
 
 const logger = createLogger({
   transports: [
@@ -9,6 +9,10 @@ const logger = createLogger({
     new transports.File({
       level: 'error',
       filename: './src/logs/error.log'
+    }),
+    new transports.Console({
+      level: 'info',
+      format: format.combine(format.colorize(), format.simple())
     })
   ]
 });

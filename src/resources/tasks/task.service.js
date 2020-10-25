@@ -1,4 +1,4 @@
-const tasksRepo = require('./task.memory.repository');
+const tasksRepo = require('./task.db.repository');
 
 const getAll = async boardId => tasksRepo.getAll(boardId);
 
@@ -10,17 +10,9 @@ const update = async (id, task) => tasksRepo.update(id, task);
 
 const remove = async id => tasksRepo.remove(id);
 
-const unassignUserTasks = async userId => {
-  const tasks = await getAll();
-  tasks
-    .filter(task => task.userId === userId)
-    .forEach(async task => await update(task.id, { ...task, userId: null }));
-};
+const unassignUserTasks = async userId => tasksRepo.unassignUserTasks(userId);
 
-const removeByBoardId = async boardId => {
-  const tasks = await getAll(boardId);
-  tasks.forEach(async task => await remove(task.id));
-};
+const removeByBoardId = async boardId => tasksRepo.removeByBoardId(boardId);
 
 module.exports = {
   getAll,
