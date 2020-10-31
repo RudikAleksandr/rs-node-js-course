@@ -32,6 +32,7 @@
         "plugin:prettier/recommended"
     ],
     "rules": {
+        "require-atomic-updates": "off",
         "no-debugger": 1,
         // Possible errors
         "comma-dangle": [

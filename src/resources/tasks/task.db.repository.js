@@ -10,7 +10,7 @@ const update = async (id, task) => Task.findByIdAndUpdate(id, task);
 
 const remove = async id => Task.findByIdAndRemove(id);
 
-const removeByBoardId = async boardId => Task.remove({ boardId });
+const removeByBoardId = async boardId => Task.deleteMany({ boardId });
 
 const unassignUserTasks = async userId =>
   Task.updateMany({ userId }, { userId: null });

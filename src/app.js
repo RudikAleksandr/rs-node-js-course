@@ -7,16 +7,20 @@ const { logger, logRequest } = require('./common/logger');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
+const loginRouter = require('./resources/login/login.router');
+const { checkAuthorization } = require('./resources/login/login.service');
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 process.on('uncaughtException', err => {
-  logger.error(`captured error: ${err.message}`);
+  logger.error(`captured error: ${err.message} ${err.stack}`);
 });
 
 process.on('unhandledRejection', reason => {
-  logger.error(`Unhandled rejection detected: ${reason.message}`);
+  logger.error(
+    `Unhandled rejection detected: ${reason.message} ${reason.stack}`
+  );
 });
 
 app.use(express.json());
@@ -31,8 +35,9 @@ app.use('/', (req, res, next) => {
   next();
 });
 
-app.use('/users', userRouter);
-app.use('/boards', [boardRouter, taskRouter]);
+app.use('/login', loginRouter);
+app.use('/users', checkAuthorization, userRouter);
+app.use('/boards', checkAuthorization, [boardRouter, taskRouter]);
 
 app.use((err, req, res, next) => {
   logger.error(err.stack);
